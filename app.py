@@ -377,6 +377,12 @@ with right:
     st.subheader("Actual vs Forecast (visual)")
     actual_tail = store_train.tail(90)[["Date", "Sales"]].rename(columns={"Sales": "ActualSales"})
     forecast_part = store_test.head(42)[["Date", "ForecastSales"]]
+
+
+    #GAP FOR WEEKENDS
+    # forecast_part = store_test.head(42)[["Date", "ForecastSales", "Open"]].copy()
+    # forecast_part.loc[forecast_part["Open"] == 0, "ForecastSales"] = np.nan
+    # forecast_part = forecast_part[["Date", "ForecastSales"]]
     plot_df = pd.merge(actual_tail, forecast_part, on="Date", how="outer").sort_values("Date").set_index("Date")
     st.line_chart(plot_df[["ActualSales", "ForecastSales"]])
 
